@@ -1,6 +1,6 @@
 # Jogo Pedra, Papel e Tesoura
 
-Este projeto consiste em um jogo (Pedra, Papel e Tesoura) desenvolvido em Java, que permite a realização de partidas entre dois jogadores ou entre um jogador e o computador por meio de conexão com Sockets, possibilitando tanto rede local como computadores de diferentes redes.
+Este projeto consiste em um jogo (Pedra, Papel e Tesoura) desenvolvido em Java, que permite a realização de partidas entre dois jogadores ou entre um jogador e o computador por meio de conexão SOCKET, possibilitando tanto rede local como computadores de diferentes redes.
 
 ## Participantes
 
@@ -54,7 +54,7 @@ Este projeto consiste em um jogo (Pedra, Papel e Tesoura) desenvolvido em Java, 
 ### Interface Gráfica de Usuário
 
 - Desenvolvida para ser intuitiva e de fácil navegação e muito simples.
-- Utiliza comandos de console para interação, garantindo compatibilidade com diferentes sistemas operacionais.
+- A interface utiliza botões para interação, enquanto o servidor utiliza protocolos para comunicação de informações.
 
 ### Lógica do Jogo
 
@@ -65,9 +65,9 @@ Este projeto consiste em um jogo (Pedra, Papel e Tesoura) desenvolvido em Java, 
 
 ## Tecnologias Utilizadas
 
-- Linguagem de Programação: Java, Spring Boot e Java GUI
-- Ambiente de Desenvolvimento: Console de comando padrão do sistema operacional.
-- Ferramentas e Bibliotecas: Utilização de bibliotecas padrão do Java.
+- Linguagem de Programação: Java e Java Swing.
+- Ambiente de Desenvolvimento: NetBeans e IntelliJ IDE.
+- Ferramentas e Bibliotecas: Utilização de bibliotecas padrão do Java, e biblioteca visual FlatLaf.
 
 ## Iniciar o Jogo
 
@@ -80,9 +80,8 @@ Este projeto consiste em um jogo (Pedra, Papel e Tesoura) desenvolvido em Java, 
 
 ## Jogabilidade
 
-- Siga as instruções exibidas no console para realizar as jogadas.
 - Cada jogador deve escolher entre Pedra, Papel ou Tesoura.
-- O console exibirá o resultado de cada rodada.
+- A interface exibirá o resultado de cada rodada.
 - O jogo pode ser encerrado a qualquer momento apenas finalizando o aplicativo.
 
 ## Considerações Finais
