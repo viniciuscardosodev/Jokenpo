@@ -6,43 +6,43 @@ package entity;
  */
 public class Partida {
     
-    private String jogador1;
-    private String jogador2;
-    private String jogadaJ1;
-    private String jogadaJ2;
+    private String desafiante;
+    private String desafiado;
+    private String jogadaDesafiante;
+    private String jogadaDesafiado;
     private String ganhador;
     private String[] opcoes = {"PEDRA", "PAPEL", "TESOURA"};
 
-    public String getJogador1() {
-        return jogador1;
+    public String getDesafiante() {
+        return desafiante;
     }
 
-    public void setJogador1(String jogador1) {
-        this.jogador1 = jogador1;
+    public void setDesafiante(String desafiante) {
+        this.desafiante = desafiante;
     }
 
-    public String getJogador2() {
-        return jogador2;
+    public String getDesafiado() {
+        return desafiado;
     }
 
-    public void setJogador2(String jogador2) {
-        this.jogador2 = jogador2;
+    public void setDesafiado(String desafiado) {
+        this.desafiado = desafiado;
     }
 
-    public String getJogadaJ1() {
-        return jogadaJ1;
+    public String getJogadaDesafiante() {
+        return jogadaDesafiante;
     }
 
-    public void setJogadaJ1(String jogadaJ1) {
-        this.jogadaJ1 = jogadaJ1;
+    public void setJogadaDesafiante(String jogadaDesafiante) {
+        this.jogadaDesafiante = jogadaDesafiante;
     }
 
-    public String getJogadaJ2() {
-        return jogadaJ2;
+    public String getJogadaDesafiado() {
+        return jogadaDesafiado;
     }
 
-    public void setJogadaJ2(String jogadaJ2) {
-        this.jogadaJ2 = jogadaJ2;
+    public void setJogadaDesafiado(String jogadaDesafiado) {
+        this.jogadaDesafiado = jogadaDesafiado;
     }
 
     public String getGanhador() {
@@ -58,10 +58,10 @@ public class Partida {
        String ganhador;
        
        for (int i = 0; i < opcoes.length; i++) {
-           if (jogadaJ1.equalsIgnoreCase(opcoes[i])) {
+           if (jogadaDesafiante.equalsIgnoreCase(opcoes[i])) {
                j1 = i;
            }
-           if (jogadaJ2.equalsIgnoreCase(opcoes[i])) {
+           if (jogadaDesafiado.equalsIgnoreCase(opcoes[i])) {
                j2 = i;
            }
        }
@@ -71,9 +71,9 @@ public class Partida {
         } else if ((j1 == 0 && j2 == 2) ||
                    (j1 == 1 && j2 == 0) ||
                    (j1 == 2 && j2 == 1)) {
-           ganhador = jogador1;
+           ganhador = desafiante;
         } else {
-             ganhador = jogador2;
+             ganhador = desafiado;
         }
         this.ganhador = ganhador;
    }

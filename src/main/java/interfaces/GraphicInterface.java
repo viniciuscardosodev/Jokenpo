@@ -21,8 +21,8 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
     /**
      * Creates new form GraphicInterface
      */
-    public GraphicInterface() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
+    public GraphicInterface() {
+//        UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
         initComponents();
         init();
     }
@@ -50,6 +50,9 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
         btnPapel = new javax.swing.JToggleButton();
         btnTesoura = new javax.swing.JToggleButton();
         lblOponetne = new javax.swing.JLabel();
+        lblDerrotas = new javax.swing.JLabel();
+        lblVitorias = new javax.swing.JLabel();
+        lblEmpates = new javax.swing.JLabel();
         playersPanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         listPlayers = new javax.swing.JList<>();
@@ -65,7 +68,7 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
 
         txtHistoricoChat.setEditable(false);
         txtHistoricoChat.setColumns(20);
-        txtHistoricoChat.setFont(new Font("Segoe UI", 0, 14)); // NOI18N
+        txtHistoricoChat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtHistoricoChat.setRows(5);
         txtHistoricoChat.setFocusable(false);
         jScrollPane1.setViewportView(txtHistoricoChat);
@@ -86,7 +89,7 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
             }
         });
         txtChatInput.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(KeyEvent evt) {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtChatInputKeyPressed(evt);
             }
         });
@@ -143,47 +146,69 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
         txtHistorico.setFocusable(false);
         jScrollPane2.setViewportView(txtHistorico);
 
-        btnPedra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/pedra128x128.png"))); // NOI18N
+        btnPedra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pedra128x128.png"))); // NOI18N
         btnPedra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPedraActionPerformed(evt);
             }
         });
 
-        btnPapel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/papel.png"))); // NOI18N
+        btnPapel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/papel.png"))); // NOI18N
         btnPapel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPapelActionPerformed(evt);
             }
         });
 
-        btnTesoura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/tesoura.png"))); // NOI18N
+        btnTesoura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tesoura.png"))); // NOI18N
         btnTesoura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTesouraActionPerformed(evt);
             }
         });
 
-        lblOponetne.setFont(new Font("Segoe UI", 0, 24)); // NOI18N
+        lblOponetne.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lblOponetne.setText("Oponente: ");
+
+        lblDerrotas.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblDerrotas.setForeground(new java.awt.Color(255, 0, 0));
+        lblDerrotas.setText("Derrotas: ");
+
+        lblVitorias.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblVitorias.setForeground(new java.awt.Color(51, 255, 0));
+        lblVitorias.setText("Vitórias: ");
+
+        lblEmpates.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblEmpates.setForeground(new java.awt.Color(255, 204, 51));
+        lblEmpates.setText("Empates: ");
 
         javax.swing.GroupLayout gamePanelLayout = new javax.swing.GroupLayout(gamePanel);
         gamePanel.setLayout(gamePanelLayout);
         gamePanelLayout.setHorizontalGroup(
             gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(gamePanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblOponetne)
-                .addContainerGap(434, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gamePanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnPedra)
-                .addGap(42, 42, 42)
-                .addComponent(btnPapel)
-                .addGap(38, 38, 38)
-                .addComponent(btnTesoura)
-                .addGap(36, 36, 36))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(gamePanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(lblOponetne)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gamePanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                        .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnPedra)
+                            .addComponent(lblVitorias, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnPapel)
+                            .addGroup(gamePanelLayout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(lblEmpates, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnTesoura)
+                            .addComponent(lblDerrotas, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(17, 17, 17))))
         );
         gamePanelLayout.setVerticalGroup(
             gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -191,18 +216,24 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
                 .addContainerGap()
                 .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(gamePanelLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2)
+                        .addContainerGap())
+                    .addGroup(gamePanelLayout.createSequentialGroup()
                         .addComponent(lblOponetne)
                         .addGap(51, 51, 51)
                         .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnTesoura)
                             .addComponent(btnPedra)
                             .addComponent(btnPapel))
-                        .addGap(0, 85, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblVitorias)
+                            .addComponent(lblEmpates)
+                            .addComponent(lblDerrotas))
+                        .addGap(28, 28, 28))))
         );
 
-        listPlayers.setFont(new Font("Segoe UI", 0, 18)); // NOI18N
+        listPlayers.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         listPlayers.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 listPlayersValueChanged(evt);
@@ -215,7 +246,7 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
         playersPanelLayout.setHorizontalGroup(
             playersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(playersPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+                .addComponent(jScrollPane3)
                 .addContainerGap())
         );
         playersPanelLayout.setVerticalGroup(
@@ -229,15 +260,12 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
         anchor.setLayout(anchorLayout);
         anchorLayout.setHorizontalGroup(
             anchorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(anchorLayout.createSequentialGroup()
-                .addGroup(anchorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, anchorLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(playersPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chatPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(gamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, anchorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(playersPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chatPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(gamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         anchorLayout.setVerticalGroup(
             anchorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -346,6 +374,17 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
      * @param args the command line arguments
      */
     public void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GraphicInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GraphicInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(GraphicInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GraphicInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
         setVisible(true);
     }
 
@@ -383,7 +422,10 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblDerrotas;
+    private javax.swing.JLabel lblEmpates;
     private javax.swing.JLabel lblOponetne;
+    private javax.swing.JLabel lblVitorias;
     private javax.swing.JList<String> listPlayers;
     private javax.swing.JPanel playersPanel;
     private javax.swing.JTextField txtChatInput;
@@ -407,7 +449,8 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
     private Client client;
     private String oponente;
     private String me;
-    
+    private int vitorias, empates, derrotas;
+       
     public void build(Client client, PrintWriter out, BufferedReader in) throws IOException {
     this.out = out;
     this.in = in;
@@ -461,6 +504,24 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
         this.historicoChat += msg + " \n";
         this.txtHistoricoChat.setText(this.historicoChat);
     }
+
+    public void setVitorias(int v) {
+        this.vitorias = v;
+        this.lblVitorias.setText("Vitórias: " + this.vitorias);
+    }
+
+    public void setEmpates(int e) {
+        this.empates = e;
+        this.lblEmpates.setText("Empates: " + this.empates);
+    }
+
+    public void setDerrotas(int d) {
+        this.derrotas = d;
+        this.lblDerrotas.setText("Derrotas : " + this.derrotas);
+    }
+    
+    
+    
     
     public String getNick(){
         return this.me;

@@ -22,8 +22,8 @@ public class DialogConnect extends javax.swing.JFrame implements Runnable {
     /**
      * Creates new form DialogConnect
      */
-    public DialogConnect() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
+    public DialogConnect() {
+//        UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
         initComponents();
         init();
     }
@@ -77,7 +77,7 @@ public class DialogConnect extends javax.swing.JFrame implements Runnable {
             }
         });
         txtNick.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(KeyEvent evt) {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtNickKeyPressed(evt);
             }
         });
@@ -151,15 +151,7 @@ public class DialogConnect extends javax.swing.JFrame implements Runnable {
             
         } catch (IOException | NumberFormatException ex) {
            this.lblErro.setText("Verifique o endereço digitado e tente novamente.");
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(DialogConnect.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DialogConnect.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(DialogConnect.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(DialogConnect.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
     }//GEN-LAST:event_btnConectarActionPerformed
 
     private void txtNickFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNickFocusGained
@@ -182,9 +174,6 @@ public class DialogConnect extends javax.swing.JFrame implements Runnable {
         main(new String[]{});
     }
     
-    
-    
-    
     /**
      * @param args the command line arguments
      */
@@ -197,7 +186,7 @@ public class DialogConnect extends javax.swing.JFrame implements Runnable {
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
+                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); // 
                     break;
                 }
             }
@@ -215,17 +204,7 @@ public class DialogConnect extends javax.swing.JFrame implements Runnable {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
                     new DialogConnect().setVisible(true);
-                } catch (UnsupportedLookAndFeelException ex) {
-                    Logger.getLogger(DialogConnect.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(DialogConnect.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(DialogConnect.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(DialogConnect.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
         });
     }

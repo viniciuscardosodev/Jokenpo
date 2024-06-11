@@ -25,8 +25,8 @@ public class Server implements Runnable {
     private ExecutorService executorService;
     private HashMap<String, ConnectionHandler> listaJogadoresAtivos;
     private List<String> jogadas;
+    private static List<Partida> jogosPendentes;
 
-    
     public Server() {
         done = false;
         listaConn = new ArrayList<>();
@@ -35,7 +35,8 @@ public class Server implements Runnable {
         jogadas.add("TESOURA");
         jogadas.add("PAPEL");
         jogadas.add("PEDRA");
-        
+        this.jogosPendentes = new ArrayList<>();
+
     }
 
     @Override
@@ -83,7 +84,7 @@ public class Server implements Runnable {
     public void broadcast(String mensagem) {
         for (ConnectionHandler ch : listaConn) {
             if (ch != null) {
-                ch.sendMessage(mensagem);
+                ch.mandarMensagem(mensagem);
             }
         }
     }
@@ -116,11 +117,13 @@ public class Server implements Runnable {
         private PrintWriter out;
         private String nick;
         private String oponente;
-        private static List<Partida> jogosPendentes;
+
+        // [vitorias] [empates] [derrotas]
+        private int[] placar;
 
         public ConnectionHandler(Socket client) {
             this.client = client;
-            this.jogosPendentes = new ArrayList<>();
+            this.placar = new int[3];
         }
 
         @Override
@@ -135,83 +138,112 @@ public class Server implements Runnable {
                         String[] messageSplit = message.split(" ", 2);
                         nickname = messageSplit[1];
                         if (messageSplit.length == 2 && !nickname.isBlank()) {
-                           if (isNickDisponivel(nickname)){
-                               out.println("OK");
-                               this.nick = nickname;
-                               listaJogadoresAtivos.put(nickname, this);
-                            for (String key : listaJogadoresAtivos.keySet()) {
-                                if (listaJogadoresAtivos.get(key).getCliente().isConnected()){
-                                    broadcast("/newPlayer " + key);
-                                } else {
-                                    listaJogadoresAtivos.remove(key);
-                                    listaJogadoresAtivos.get(key).shutdown();
+                            if (isNickDisponivel(nickname)) {
+                                out.println("OK");
+                                this.nick = nickname;
+                                listaJogadoresAtivos.put(nickname, this);
+                                for (String key : listaJogadoresAtivos.keySet()) {
+                                    if (listaJogadoresAtivos.get(key).getCliente().isConnected()) {
+                                        broadcast("/newPlayer " + key);
+                                    } else {
+                                        listaJogadoresAtivos.remove(key);
+                                        listaJogadoresAtivos.get(key).shutdown();
+                                    }
+                                }
+                            } else {
+                                out.println("INVALIDO");
+                            }
+                        }
+                    } else if (message.startsWith("/jogada")) {
+                        boolean pendente = false;
+                        Partida p = new Partida();
+                        p.setDesafiante(this.nick);
+                        String jogada = message.split(" ")[1];
+                        String op = message.split(" ")[2];
+                        this.oponente = op;
+                        p.setDesafiado(oponente);
+
+                        p.setJogadaDesafiante(jogada);
+                        if (oponente.equalsIgnoreCase("SERVIDOR")) {
+                            Random r = new Random();
+                            int j = r.nextInt(jogadas.size());
+                            p.setJogadaDesafiado(jogadas.get(j));
+                            p.verificarGanhador();
+                            System.out.println("Jogou contra o sistema");
+                            out.println("/resultado " + p.getGanhador());
+                            
+                            if (p.getGanhador().equals("EMPATE")) {
+                                        addEmpate();
+                                        out.println("/placar " + this.placar[0] + " " + this.placar[1] + " " + this.placar[2]);
+                                    } else if (p.getGanhador().equals(this.nick)){
+                                        addVitoria();
+                                        out.println("/placar " + this.placar[0] + " " + this.placar[1] + " " + this.placar[2]);
+                                    } else if (p.getGanhador().equals("SERVIDOR")){
+                                        addDerrota();
+                                        out.println("/placar " + this.placar[0] + " " + this.placar[1] + " " + this.placar[2]);
+                                    }
+    
+                        } else {
+                            String desafiante;
+                            String desafiado;
+                            for (int i = 0; i < jogosPendentes.size(); i++) {
+                                desafiante = jogosPendentes.get(i).getDesafiante();
+                                desafiado = jogosPendentes.get(i).getDesafiado();
+                                if (desafiante.equals(oponente) && desafiado.equals(this.nick)) {
+                                    jogosPendentes.get(i).setJogadaDesafiado(jogada);
+                                    jogosPendentes.get(i).verificarGanhador();
+                                    out.println("/resultado " + jogosPendentes.get(i).getGanhador());
+                                    if (jogosPendentes.get(i).getGanhador().equals("EMPATE")) {
+                                        addEmpate();
+                                        listaJogadoresAtivos.get(oponente).addEmpate();
+                                        out.println("/placar " + this.placar[0] + " " + this.placar[1] + " " + this.placar[2]);
+                                        int[] placarOponente =  listaJogadoresAtivos.get(oponente).getPlacar();
+                                        listaJogadoresAtivos.get(oponente).out.println("/placar " + placarOponente[0] + " " + placarOponente[1] + " " + placarOponente[2]);
+                                    } else if (jogosPendentes.get(i).getGanhador().equals(this.nick)){
+                                        addVitoria();
+                                        listaJogadoresAtivos.get(oponente).addDerrota();
+                                        out.println("/placar " + this.placar[0] + " " + this.placar[1] + " " + this.placar[2]);
+                                        int[] placarOponente =  listaJogadoresAtivos.get(oponente).getPlacar();
+                                        listaJogadoresAtivos.get(oponente).out.println("/placar " + placarOponente[0] + " " + placarOponente[1] + " " + placarOponente[2]);
+                                    } else if (jogosPendentes.get(i).getGanhador().equals(oponente)){
+                                        addDerrota();
+                                        listaJogadoresAtivos.get(oponente).addVitoria();
+                                        out.println("/placar " + this.placar[0] + " " + this.placar[1] + " " + this.placar[2]);
+                                        int[] placarOponente =  listaJogadoresAtivos.get(oponente).getPlacar();
+                                        listaJogadoresAtivos.get(oponente).out.println("/placar " + placarOponente[0] + " " + placarOponente[1] + " " + placarOponente[2]);
+                                    }
+                                    listaJogadoresAtivos.get(oponente).out.println("/resultado " + jogosPendentes.get(i).getGanhador());
+                                    jogosPendentes.remove(i);
+                                    pendente = true;
+                                    break;
                                 }
                             }
-                           } else {
-                               out.println("INVALIDO");
-                           }
-                    } 
-            } else
-                if (message.startsWith("/jogada")){
-                    boolean pendente = false;
-                    Partida p = new Partida();
-                    p.setJogador1(this.nick);
-                    String jogada = message.split(" ")[1];
-                    String op = message.split(" ")[2];
-                    this.oponente = op;
-                    p.setJogador2(oponente);
-                    
-                    p.setJogadaJ1(jogada);
-                    if (oponente.equalsIgnoreCase("SERVIDOR")){
-                        Random r = new Random();
-                        int j = r.nextInt(jogadas.size());
-                    p.setJogadaJ2(jogadas.get(j));
-                    p.verificarGanhador();
-                    System.out.println("Jogou contra o sistema");
-                    out.println("/resultado " + p.getGanhador());
-                    } else {
-                      String jogador1;
-                      String jogador2;
-                      for (int i = 0; i < jogosPendentes.size(); i++) {
-                          jogador1 = jogosPendentes.get(i).getJogador1();
-                          jogador2 = jogosPendentes.get(i).getJogador2();
-                          if ((jogador1.equals(this.nick) || jogador1.equals(oponente)) &&
-                              (jogador2.equals(nick) || jogador2.equals(oponente)))
-                          {
-                              jogosPendentes.get(i).setJogadaJ2(jogada);
-                              jogosPendentes.get(i).verificarGanhador();
-                              out.println("/resultado " + jogosPendentes.get(i).getGanhador());
-                              listaJogadoresAtivos.get(p.getJogador2()).out.println("/resultado " + jogosPendentes.get(i).getGanhador());
-                              this.jogosPendentes.remove(i);
-                              pendente = true;
-                              break;
-                          }
-                      }
-                      if (!pendente) {
-                          jogosPendentes.add(p);
-                          listaJogadoresAtivos.get(oponente).out.println("/setOponente " + this.nick);
-                      }
-                      
+                            if (!pendente) {
+                                jogosPendentes.add(p);
+                                listaJogadoresAtivos.get(oponente).out.println("/setOponente " + this.nick);
+                            }
+
+                        }
+                    } else if (message.startsWith("/quit")) {
+                        broadcast("/removerJogador " + this.nick);
+                        shutdown();
+                    } else if (message.startsWith("/msg")) {
+                        String[] mensagemArray = message.split(" ");
+                        String mensagemFinal = "";
+                        for (int i = 1; i < mensagemArray.length; i++) {
+                            mensagemFinal += " " + mensagemArray[i];
+                        }
+                        System.out.println("Mensagem recebida de " + nick + mensagemFinal);
+                        broadcast("/msg " + this.nick + " disse: " + mensagemFinal);
                     }
-                } else if (message.startsWith("/quit")){
-                    broadcast("/removerJogador " + this.nick);
-                    shutdown();
-                } else if (message.startsWith("/msg")){
-                    String[] mensagemArray = message.split(" ");
-                    String mensagemFinal = "";
-                    for (int i = 1; i < mensagemArray.length; i++) {
-                        mensagemFinal += " " + mensagemArray[i];
-                    }
-                    System.out.println("Mensagem recebida de " + nick + mensagemFinal);
-                    broadcast("/msg " + this.nick + " disse: " + mensagemFinal);
+
                 }
-                
-            }} catch (IOException e) {
+            } catch (IOException e) {
                 shutdown();
-            } 
+            }
         }
 
-        public void sendMessage(String message) {
+        public void mandarMensagem(String message) {
             out.println(message);
         }
 
@@ -238,10 +270,24 @@ public class Server implements Runnable {
         public Socket getCliente() {
             return this.client;
         }
+        
+        public void addVitoria(){
+            this.placar[0]++;
+        }
+        public void addEmpate(){
+            this.placar[1]++;
+        }
+        public void addDerrota(){
+            this.placar[2]++;
+        }
+        
+        public int[] getPlacar(){
+            return this.placar;
+        };
+        
     }
 
     public static void main(String[] args) {
         new Server().run();
     }
 }
-

@@ -19,7 +19,7 @@ public class Client implements Runnable{
     private GraphicInterface g;
     
     
-    public Client(Socket cliente, String nick) throws IOException, UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException{
+    public Client(Socket cliente, String nick) throws IOException{
         this.done = false;
         this.cliente = cliente;
         g = new GraphicInterface();
@@ -66,6 +66,10 @@ public class Client implements Runnable{
                         mensagemFinal += " " + mensagemDividida[i];
                     }
                     g.addMensagem(mensagemFinal);
+                } else if (dadosServidor.startsWith("/placar")){
+                    g.setVitorias(Integer.parseInt(mensagemDividida[1]));
+                    g.setEmpates(Integer.parseInt(mensagemDividida[2]));
+                    g.setDerrotas(Integer.parseInt(mensagemDividida[3]));
                 }
                 
             }
