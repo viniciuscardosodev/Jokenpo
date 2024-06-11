@@ -1,6 +1,6 @@
 # Jogo Pedra, Papel e Tesoura
 
-Este projeto consiste em um jogo (Pedra, Papel e Tesoura) desenvolvido em Java, que permite a realização de partidas entre dois jogadores ou entre um jogador e o computador por meio de conexão SOCKET, possibilitando tanto rede local como computadores de diferentes redes.
+Este projeto consiste em um jogo (Pedra, Papel e Tesoura) desenvolvido em Java, que permite a realização de partidas entre dois jogadores ou entre um jogador e o computador por meio de conexão com Sockets, possibilitando tanto rede local como computadores de diferentes redes.
 
 ## Participantes
 
