@@ -1,9 +1,5 @@
-package interfaces;
 
-import entity.Client;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +8,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -23,6 +21,7 @@ public class DialogConnect extends javax.swing.JFrame implements Runnable {
      * Creates new form DialogConnect
      */
     public DialogConnect() {
+//        UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
         initComponents();
         init();
     }
@@ -189,8 +188,13 @@ public class DialogConnect extends javax.swing.JFrame implements Runnable {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
-                 UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DialogConnect.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(DialogConnect.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(DialogConnect.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
             Logger.getLogger(DialogConnect.class.getName()).log(Level.SEVERE, null, ex);
         }
         //</editor-fold>

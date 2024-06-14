@@ -1,10 +1,9 @@
-package interfaces;
 
 
-import entity.Client;
 
-import javax.swing.*;
-import java.awt.*;
+
+
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class GraphicInterface extends javax.swing.JFrame implements Runnable{
 
@@ -144,21 +146,21 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
         txtHistorico.setFocusable(false);
         jScrollPane2.setViewportView(txtHistorico);
 
-        btnPedra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pedra128x128.png"))); // NOI18N
+        btnPedra.setIcon(new javax.swing.ImageIcon(getClass().getResource("pedra.png"))); // NOI18N
         btnPedra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPedraActionPerformed(evt);
             }
         });
 
-        btnPapel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/papel.png"))); // NOI18N
+        btnPapel.setIcon(new javax.swing.ImageIcon(getClass().getResource("papel.png"))); // NOI18N
         btnPapel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPapelActionPerformed(evt);
             }
         });
 
-        btnTesoura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tesoura.png"))); // NOI18N
+        btnTesoura.setIcon(new javax.swing.ImageIcon(getClass().getResource("tesoura.png"))); // NOI18N
         btnTesoura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTesouraActionPerformed(evt);
@@ -458,8 +460,7 @@ public class GraphicInterface extends javax.swing.JFrame implements Runnable{
     public void setMe(String nick){
         this.me = nick;
     }
-
-    //Não usado
+    
     public void mensagemRecebida(String mensagem){
         this.historicoChat += mensagem + "\n";
         this.txtHistoricoChat.setText(this.historicoChat);
